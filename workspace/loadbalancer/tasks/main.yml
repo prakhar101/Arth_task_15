@@ -1,0 +1,30 @@
+---
+# tasks file for loadbalancer
+
+- name : Installing the haproxy
+  package :
+            name : "haproxy"
+            state : present
+
+
+- name : configuring the server
+  template :
+          src : "conf_file.cfg"
+          dest : "/etc/haproxy/haproxy.cfg"
+
+
+  notify :
+          - "restart-service"
+
+
+- name : ensuring that the service has been started
+  service :
+          name : "haproxy"
+          state : started
+
+- name : creating firewall rule
+  firewalld :
+          port : "8080/tcp"
+          permanent : yes
+          state : enabled
+          immediate : yes

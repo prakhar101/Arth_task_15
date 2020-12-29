@@ -1,0 +1,30 @@
+---
+# tasks file for cdrom-and-yum
+
+- name : creating dvd drive
+  file :
+          path : "{{ dvd }}"
+          state : directory
+
+- name : mounting the cd rom to the drive
+  mount :
+          path : "{{ dvd }}"
+          src : "/dev/sr0"
+          state : mounted
+          fstype : iso9660
+
+
+- name : configuring the yum
+  yum_repository :
+          name : "{{ item }}"
+          description : "Repo for {{ item }}"
+          baseurl : "{{ dvd }}/{{ item }}/"
+          enabled : yes
+          gpgcheck : no
+ 
+  loop : "{{ repos }}"
+
+
+
+
+

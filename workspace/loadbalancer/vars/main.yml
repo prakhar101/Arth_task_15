@@ -1,0 +1,5 @@
+---
+# vars file for loadbalancer
+
+
+haproxy_port : "8080"

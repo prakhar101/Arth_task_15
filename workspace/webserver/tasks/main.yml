@@ -1,0 +1,49 @@
+---
+# tasks file for webserver
+
+- name : Installing the httpd software
+  block :
+  - package :
+          name : "httpd"
+          state : present
+
+  rescue :
+  - package :
+          name : "apache2"
+          state : present
+  
+
+- name : configuring the server
+  block :
+  - template :
+          src : "configuration.j2"
+          dest : "/etc/httpd/conf.d/conf_file.conf"
+    notify :        
+          - "restart-service"
+
+  rescue :
+  - template :
+          src : "configuration.j2"
+          dest : "/etc/apache2/conf.d/conf_file.conf"
+    notify :
+            - "restart-service"
+
+
+- name : creating document root
+  file :
+          path : "{{ doc_root }}"
+          state : directory
+
+- name : uploading files in the doc-root
+  template :
+          src : "web-server.j2"
+          dest : "{{ doc_root }}/index.html"
+
+
+- name : ensuring that service has been started
+  service :
+          name : "httpd"
+          state : started
+
+
+

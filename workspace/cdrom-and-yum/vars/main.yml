@@ -1,0 +1,11 @@
+---
+# vars file for cdrom-and-yum
+
+dvd : "/dvd"
+repos :
+        - "AppStream"
+        - "BaseOS"
+
+
+
+
